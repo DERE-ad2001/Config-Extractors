@@ -1,10 +1,6 @@
 """
-PixelPaint / JanelaRAT static config extractor (dnfile + dncil).
+  JanelaRAT static config extractor (dnfile + dncil).
 
-Locates the Class55-style static constructor, dumps ldstr operands, decrypts
-AES blobs (smethod_27), and emits a config dictionary per sample.
-
-Usage:
   python extracto2.py <sample | directory>
 """
 
