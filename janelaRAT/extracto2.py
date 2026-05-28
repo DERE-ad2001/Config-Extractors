@@ -16,14 +16,15 @@ import os
 import re
 import sys
 from base64 import b64decode
+from hashlib import md5
 from typing import Any, Iterator, Optional
 
 import dnfile
+from Crypto.Cipher import AES
 from dncil.cil.body import CilMethodBody
 from dncil.cil.body.reader import CilMethodBodyReaderBase
 from dncil.cil.error import MethodBodyFormatError
 from dncil.clr.token import StringToken
-from decrypt_smethod27 import decrypt
 from dnfile import dnPE
 from dnfile.mdtable import MethodDefRow
 
@@ -35,6 +36,17 @@ CONFIG_MARK = "volatile."
 CONFIG_MIN_INSNS = 100
 
 B64_RE = re.compile(r"^[A-Za-z0-9+/]+={0,2}$")
+
+
+def decrypt(blob: str, key: str) -> str:
+    """AES-CBC decrypt (MD5 key, IV prefix) — Class56.smethod_27."""
+    raw = b64decode(blob)
+    iv, ct = raw[:16], raw[16:]
+    pt = AES.new(md5(key.encode()).digest(), AES.MODE_CBC, iv).decrypt(ct)
+    pad = pt[-1]
+    if 1 <= pad <= 16 and pt.endswith(bytes([pad]) * pad):
+        pt = pt[:-pad]
+    return pt.decode()
 
 
 class _BodyReader(CilMethodBodyReaderBase):
