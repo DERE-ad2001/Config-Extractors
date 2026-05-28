@@ -1,0 +1,3 @@
+dnfile>=0.14
+dncil>=1.0
+pycryptodome
