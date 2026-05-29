@@ -1,7 +1,7 @@
 """
   JanelaRAT static config extractor (dnfile + dncil).
 
-  python extracto2.py <sample | directory>
+  python extractor.py <sample | directory>
 """
 
 from __future__ import annotations
